@@ -4,6 +4,7 @@ import path from 'node:path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+  base: '/asmwebsitee/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
