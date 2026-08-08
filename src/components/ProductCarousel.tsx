@@ -87,7 +87,7 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ products, titl
       <div className={`absolute top-0 left-0 w-32 h-full bg-gradient-to-r ${darkMode ? 'from-[#0f0f0f]' : 'from-white'} to-transparent z-10 pointer-events-none`} />
       <div className={`absolute top-0 right-0 w-32 h-full bg-gradient-to-l ${darkMode ? 'from-[#0f0f0f]' : 'from-white'} to-transparent z-10 pointer-events-none`} />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
         
         {/* Header containing action buttons and textual styling */}
         <div className="flex flex-col md:flex-row items-center justify-between mb-10">

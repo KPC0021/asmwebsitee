@@ -217,7 +217,7 @@ export const Home: React.FC = () => {
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={scrollFadeInUp}
-        className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 bg-white border-b border-neutral-200/50 relative overflow-hidden"
+        className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 py-24 bg-white border-b border-neutral-200/50 relative overflow-hidden"
       >
         {/* Subtle decorative subtle background gold blur light pattern */}
         <div className="absolute top-[10%] left-[-100px] w-72 h-72 rounded-full bg-[#c9a96e]/5 blur-[90px] pointer-events-none" />
@@ -296,7 +296,7 @@ export const Home: React.FC = () => {
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={scrollFadeInUp}
-        className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 bg-[#faf8f5] relative overflow-hidden"
+        className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 py-24 bg-[#faf8f5] relative overflow-hidden"
       >
         {/* Subtle decorative background gold/neutral blur patterns */}
         <div className="absolute top-[45%] right-[-120px] w-80 h-80 rounded-full bg-[#c9a96e]/6 blur-[100px] pointer-events-none" />
@@ -377,7 +377,7 @@ export const Home: React.FC = () => {
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={scrollScaleIn}
-        className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 relative overflow-hidden"
+        className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 py-12 relative overflow-hidden"
       >
         {/* Asymmetrical magazine fold structure */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 bg-white border border-neutral-200/60 p-6 md:p-12 items-center shadow-xs">
@@ -485,7 +485,7 @@ export const Home: React.FC = () => {
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={scrollFadeInUp}
-        className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 bg-[#faf8f5] relative overflow-hidden"
+        className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 py-20 bg-[#faf8f5] relative overflow-hidden"
       >
         <SectionTitle 
           title="Best Sellers" 
@@ -636,7 +636,7 @@ export const Home: React.FC = () => {
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={scrollFadeInUp}
-        className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20"
+        className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 py-20"
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 border border-neutral-200/60 bg-white shadow-xs">
           {/* Left: Text */}
@@ -692,7 +692,7 @@ export const Home: React.FC = () => {
         variants={scrollFadeInUp}
         className="py-24 bg-[#faf8f5] border-t border-neutral-200/50"
       >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
           
           <SectionTitle 
             title="Atelier Commitments" 

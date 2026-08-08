@@ -52,7 +52,7 @@ export const ProductDetail: React.FC = () => {
 
   if (!product) {
     return (
-      <div className="mx-auto max-w-7xl px-4 py-20 text-center space-y-6">
+      <div className="mx-auto max-w-[1440px] px-4 py-20 text-center space-y-6">
         <h2 className="text-2xl font-sans text-neutral-800">Sản phẩm không tồn tại</h2>
         <p className="text-xs text-neutral-500 max-w-sm mx-auto">
           Mặt hàng thời trang bạn tìm kiếm có thể đã tạm thời hết hàng hoặc gỡ bỏ khỏi tủ đồ sưu tập.
@@ -133,7 +133,7 @@ export const ProductDetail: React.FC = () => {
 
   return (
     <div className="bg-[#FAF9F6] py-12">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
         
         {/* Back Link */}
         <Link

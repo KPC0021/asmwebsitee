@@ -26,7 +26,7 @@ export const Navbar: React.FC = () => {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-neutral-100 bg-white/80 backdrop-blur-md transition-all duration-300">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           
           {/* Logo */}

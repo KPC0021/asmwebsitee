@@ -141,7 +141,7 @@ export const Hero: React.FC = () => {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pb-16 lg:pb-24 w-full relative z-20"
+        className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-16 pb-16 lg:pb-24 w-full relative z-20"
       >
         {/* EYEBROW TEXT */}
         <div className="overflow-hidden mb-3">
