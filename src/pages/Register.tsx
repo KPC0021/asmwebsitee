@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { User, Mail, Phone, Lock, UserPlus, CheckSquare } from 'lucide-react';
+import { User, Mail, Phone, Lock, UserPlus, Eye, EyeOff } from 'lucide-react';
 import {
   validateConfirmPassword,
   validateEmail,
@@ -23,7 +23,9 @@ export const Register: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   
   // Checking terms checkbox state
-  const [agreeTerms, setAgreeTerms] = useState(true);
+  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Errors state
   const [errors, setErrors] = useState<{
@@ -71,6 +73,19 @@ export const Register: React.FC = () => {
     if (!agreeTerms) {
       showToast('Bạn cần đồng ý với Điều khoản dịch vụ của Aura để tiếp tục.', 'error');
       return;
+    }
+
+    // Check duplicate email
+    try {
+      const regUsersStr = localStorage.getItem('fashion_aura_reg_users');
+      const regUsers = regUsersStr ? JSON.parse(regUsersStr) : [];
+      if (regUsers.find((u: { email: string }) => u.email === email.trim())) {
+        setErrors((prev) => ({ ...prev, email: 'Email này đã được đăng ký. Vui lòng dùng email khác hoặc đăng nhập.' }));
+        showToast('Email đã tồn tại trong hệ thống.', 'error');
+        return;
+      }
+    } catch {
+      // ignore storage errors
     }
 
     // Call Context action to register & login user
@@ -140,7 +155,7 @@ export const Register: React.FC = () => {
               </label>
               <div className="relative">
                 <input
-                  type="text"
+                  type="email"
                   placeholder="ten_ban@email.com"
                   value={email}
                   onChange={(e) => {
@@ -190,18 +205,26 @@ export const Register: React.FC = () => {
               </label>
               <div className="relative">
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   placeholder="Tối thiểu 6 ký tự"
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
                     setErrors((prev) => ({ ...prev, password: '' }));
                   }}
-                  className={`w-full pl-10 pr-4 py-2.5 text-xs text-neutral-800 bg-neutral-50/50 border ${
+                  className={`w-full pl-10 pr-10 py-2.5 text-xs text-neutral-800 bg-neutral-50/50 border ${
                     errors.password ? 'border-red-500' : 'border-neutral-200 focus:border-neutral-950 focus:bg-white'
                   } focus:outline-none rounded-none`}
                 />
                 <Lock className="absolute left-3.5 top-3.5 text-neutral-400" size={14} />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-3 top-3 text-neutral-400 hover:text-neutral-700 transition-colors"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+                </button>
               </div>
               {errors.password && <p className="text-[10px] text-red-500 font-medium">{errors.password}</p>}
             </div>
@@ -213,18 +236,26 @@ export const Register: React.FC = () => {
               </label>
               <div className="relative">
                 <input
-                  type="password"
+                  type={showConfirmPassword ? 'text' : 'password'}
                   placeholder="Nhập lại mật khẩu"
                   value={confirmPassword}
                   onChange={(e) => {
                     setConfirmPassword(e.target.value);
                     setErrors((prev) => ({ ...prev, confirmPassword: '' }));
                   }}
-                  className={`w-full pl-10 pr-4 py-2.5 text-xs text-neutral-800 bg-neutral-50/50 border ${
+                  className={`w-full pl-10 pr-10 py-2.5 text-xs text-neutral-800 bg-neutral-50/50 border ${
                     errors.confirmPassword ? 'border-red-500' : 'border-neutral-200 focus:border-neutral-950 focus:bg-white'
                   } focus:outline-none rounded-none`}
                 />
                 <Lock className="absolute left-3.5 top-3.5 text-neutral-400" size={14} />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword((v) => !v)}
+                  className="absolute right-3 top-3 text-neutral-400 hover:text-neutral-700 transition-colors"
+                  tabIndex={-1}
+                >
+                  {showConfirmPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+                </button>
               </div>
               {errors.confirmPassword && (
                 <p className="text-[10px] text-red-500 font-medium">{errors.confirmPassword}</p>

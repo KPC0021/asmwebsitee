@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Mail, Lock, LogIn, Sparkles, AlertCircle } from 'lucide-react';
+import { Mail, Lock, LogIn, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { validateEmail, validatePassword } from '../utils/validation';
 import { useCartAndAuth } from '../context/CartAndAuthContext';
 
@@ -11,6 +11,7 @@ export const Login: React.FC = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const [generalError, setGeneralError] = useState('');
 
@@ -91,7 +92,7 @@ export const Login: React.FC = () => {
         {/* Brand header */}
         <div className="text-center space-y-2">
           <span className="font-sans text-xs tracking-[0.25em] font-semibold text-neutral-400 uppercase">
-            SIGN IN AUDIT
+            SIGN IN
           </span>
           <h2 className="text-2xl font-sans font-medium text-neutral-900 tracking-tight">
             Chào mừng trở lại!
@@ -117,7 +118,7 @@ export const Login: React.FC = () => {
             </label>
             <div className="relative">
               <input
-                type="text"
+                type="email"
                 placeholder="ten_ban@email.com"
                 value={email}
                 onChange={(e) => {
@@ -145,18 +146,26 @@ export const Login: React.FC = () => {
             </div>
             <div className="relative">
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 placeholder="Tối thiểu 6 ký tự"
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
                   setErrors((prev) => ({ ...prev, password: '' }));
                 }}
-                className={`w-full pl-10 pr-4 py-2.5 text-xs text-neutral-800 bg-neutral-50/50 border ${
+                className={`w-full pl-10 pr-10 py-2.5 text-xs text-neutral-800 bg-neutral-50/50 border ${
                   errors.password ? 'border-red-500' : 'border-neutral-200 focus:border-neutral-950 focus:bg-white'
                 } focus:outline-none rounded-none`}
               />
               <Lock className="absolute left-3.5 top-3.5 text-neutral-400" size={14} />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="absolute right-3 top-3 text-neutral-400 hover:text-neutral-700 transition-colors"
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+              </button>
             </div>
             {errors.password && <p className="text-[10px] text-red-500 font-medium">{errors.password}</p>}
           </div>
