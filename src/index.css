@@ -1,0 +1,117 @@
+@charset "UTF-8";
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
+  --font-display: "Cormorant Garamond", ui-serif, Georgia, serif;
+  
+  --color-noir: #0a0a0a;
+  --color-gold: #c9a96e;
+  --color-cream: #f5f0e8;
+  --color-warm-white: #faf8f5;
+}
+
+:root {
+  --color-noir: #0a0a0a;
+  --color-gold: #c9a96e;
+  --color-cream: #f5f0e8;
+  --color-warm-white: #faf8f5;
+}
+
+/* Custom premium scrollbar for modern browsers */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333333;
+  border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c9a96e;
+}
+
+/* Clean custom focus ring reset */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #c9a96e !important;
+}
+
+/* Transition class for link underline effects */
+.hover-underline-transition {
+  position: relative;
+}
+
+.hover-underline-transition::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 1.5px;
+  bottom: 0;
+  left: 0;
+  background-color: #c9a96e;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.hover-underline-transition:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+/* Marquee track animation support */
+.marquee-track {
+  display: inline-flex;
+  animation: marqueeAnimation 35s linear infinite;
+}
+
+@keyframes marqueeAnimation {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Keyframes for premium entering transitions */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Extra utility classes */
+.text-gold {
+  color: #c9a96e;
+}
+
+.bg-noir {
+  background-color: #0a0a0a;
+}
