@@ -82,7 +82,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 <button
                   key={sz}
                   onClick={() => setSelectedSize(sz)}
-                  className={`text-[10px] w-6 h-6 rounded-none flex items-center justify-center border transition-all ${
+                  className={`text-[10px] min-w-6 h-6 px-1.5 whitespace-nowrap rounded-none flex items-center justify-center border transition-all ${
                     selectedSize === sz
                       ? 'border-neutral-900 bg-neutral-900 text-white font-semibold'
                       : 'border-neutral-200 text-neutral-600 hover:border-neutral-400'

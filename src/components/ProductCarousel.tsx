@@ -201,7 +201,7 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ products, titl
                                 <button
                                   key={sz}
                                   onClick={() => handleSizeChange(product.id, sz)}
-                                  className={`text-[9px] w-6 h-6 rounded-none flex items-center justify-center border transition-all ${
+                                  className={`text-[9px] min-w-6 h-6 px-1.5 whitespace-nowrap rounded-none flex items-center justify-center border transition-all ${
                                     currentSize === sz
                                       ? 'border-[#c9a96e] bg-[#c9a96e] text-black font-semibold'
                                       : 'border-white/10 text-white/60 hover:border-white/30'

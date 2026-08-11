@@ -451,15 +451,6 @@ export const Home: React.FC = () => {
             </div>
           </div>
 
-          {/* Absolute decorative category index list on the right corner for large displays */}
-          <div className="absolute right-8 bottom-8 hidden lg:block space-y-6 text-right z-20 pointer-events-none">
-            <div className="space-y-1">
-              <p className="text-[10px] tracking-[0.25em] text-neutral-800 font-bold uppercase">01 / FEMME</p>
-              <p className="text-[10px] tracking-[0.25em] text-neutral-400 font-medium uppercase mt-1">02 / HOMME</p>
-              <p className="text-[10px] tracking-[0.25em] text-neutral-400 font-medium uppercase mt-1">03 / ACCESSORIES</p>
-            </div>
-          </div>
-
         </div>
       </motion.section>
 

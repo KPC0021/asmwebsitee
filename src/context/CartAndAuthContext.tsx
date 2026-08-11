@@ -1,6 +1,16 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { CartItem, getLocalCart, saveLocalCart } from '../utils/cartUtils';
-import { Product } from '../data/products';
+import {
+  getLocalCart,
+  migrateLegacyCart,
+  saveLocalCart,
+} from '../utils/cartUtils';
+import type { CartItem } from '../utils/cartUtils';
+import {
+  getLocalWishlist,
+  migrateLegacyWishlist,
+  saveLocalWishlist,
+} from '../utils/wishlistUtils';
+import type { Product } from '../data/products';
 
 export interface User {
   fullName: string;
@@ -43,37 +53,30 @@ export const CartAndAuthProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   // Initial load
   useEffect(() => {
-    // Cart
-    setCart(getLocalCart());
-
-    // Wishlist
-    try {
-      const storedWishlist = localStorage.getItem('fashion_aura_wishlist');
-      if (storedWishlist) {
-        setWishlist(JSON.parse(storedWishlist));
-      }
-    } catch (e) {
-      console.error(e);
-    }
-
-    // User
+    let activeUser: User | null = null;
     try {
       const storedActive = localStorage.getItem('fashion_aura_active_user');
-      if (storedActive) {
-        setUser(JSON.parse(storedActive));
-      }
+      activeUser = storedActive ? JSON.parse(storedActive) : null;
     } catch (e) {
-      console.error(e);
+      console.error('Error reading active user from localStorage', e);
     }
+
+    migrateLegacyCart(activeUser?.email);
+    migrateLegacyWishlist(activeUser?.email);
+
+    setUser(activeUser);
+    setCart(getLocalCart(activeUser?.email));
+    setWishlist(getLocalWishlist(activeUser?.email));
   }, []);
+
+  const loadShoppingState = (nextUser: User | null) => {
+    setCart(getLocalCart(nextUser?.email));
+    setWishlist(getLocalWishlist(nextUser?.email));
+  };
 
   const saveWishlist = (newWishlist: string[]) => {
     setWishlist(newWishlist);
-    try {
-      localStorage.setItem('fashion_aura_wishlist', JSON.stringify(newWishlist));
-    } catch (e) {
-      console.error(e);
-    }
+    saveLocalWishlist(newWishlist, user?.email);
   };
 
   const addToWishlist = (productId: string) => {
@@ -120,7 +123,7 @@ export const CartAndAuthProvider: React.FC<{ children: React.ReactNode }> = ({ c
       } else {
         newCart = [...prevCart, { product, selectedSize: size, quantity }];
       }
-      saveLocalCart(newCart);
+      saveLocalCart(newCart, user?.email);
       return newCart;
     });
     showToast(`Đã thêm ${quantity} x ${product.name} (Size ${size}) vào giỏ hàng`);
@@ -131,7 +134,7 @@ export const CartAndAuthProvider: React.FC<{ children: React.ReactNode }> = ({ c
       const newCart = prevCart.filter(
         (item) => !(item.product.id === productId && item.selectedSize === size)
       );
-      saveLocalCart(newCart);
+      saveLocalCart(newCart, user?.email);
       return newCart;
     });
     showToast('Đã xóa sản phẩm khỏi giỏ hàng', 'info');
@@ -149,18 +152,19 @@ export const CartAndAuthProvider: React.FC<{ children: React.ReactNode }> = ({ c
         }
         return item;
       });
-      saveLocalCart(newCart);
+      saveLocalCart(newCart, user?.email);
       return newCart;
     });
   };
 
   const clearCart = () => {
     setCart([]);
-    saveLocalCart([]);
+    saveLocalCart([], user?.email);
   };
 
   const loginUser = (loggedInUser: User) => {
     setUser(loggedInUser);
+    loadShoppingState(loggedInUser);
     localStorage.setItem('fashion_aura_active_user', JSON.stringify(loggedInUser));
     showToast(`Chào mừng quay trở lại, ${loggedInUser.fullName}!`);
   };
@@ -177,6 +181,7 @@ export const CartAndAuthProvider: React.FC<{ children: React.ReactNode }> = ({ c
       
       // Automatically log inside user
       setUser(newUser);
+      loadShoppingState(newUser);
       localStorage.setItem('fashion_aura_active_user', JSON.stringify(newUser));
       showToast(`Đăng ký thành công! Chào mừng ${newUser.fullName}.`);
     } catch (e) {
@@ -209,6 +214,7 @@ export const CartAndAuthProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   const logoutUser = () => {
     setUser(null);
+    loadShoppingState(null);
     localStorage.removeItem('fashion_aura_active_user');
     showToast('Bạn đã đăng xuất tài khoản.', 'info');
   };
