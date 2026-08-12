@@ -67,6 +67,7 @@ export const Login: React.FC = () => {
             email: matchUser.email,
             phone: matchUser.phone,
             address: matchUser.address || "Chưa cập nhật địa chỉ",
+            avatar: matchUser.avatar || '',
           });
           navigate('/profile');
         } else {
