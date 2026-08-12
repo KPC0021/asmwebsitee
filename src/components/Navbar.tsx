@@ -105,10 +105,21 @@ export const Navbar: React.FC = () => {
               <div className="flex items-center space-x-4">
                 <Link
                   to="/profile"
-                  className="flex items-center gap-1.5 py-1 px-3 border border-neutral-150 hover:border-neutral-950 transition-colors rounded-sm"
+                  className="flex items-center gap-2 py-1 pl-1 pr-3 border border-neutral-150 hover:border-neutral-950 transition-colors rounded-sm group"
+                  aria-label={`Mở hồ sơ của ${user.fullName}`}
                 >
-                  <User size={14} className="text-neutral-600" />
-                  <span className="text-xs font-medium text-neutral-700 hover:text-neutral-950">
+                  <span className="h-7 w-7 shrink-0 overflow-hidden rounded-full bg-neutral-900 text-white flex items-center justify-center ring-1 ring-neutral-200">
+                    {user.avatar ? (
+                      <img
+                        src={user.avatar}
+                        alt=""
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <User size={14} aria-hidden="true" />
+                    )}
+                  </span>
+                  <span className="text-xs font-medium text-neutral-700 group-hover:text-neutral-950">
                     {user.fullName.split(' ').pop()}
                   </span>
                 </Link>
@@ -204,7 +215,18 @@ export const Navbar: React.FC = () => {
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="flex items-center gap-2 py-3 px-2 text-sm uppercase tracking-widest font-medium border-b border-neutral-50 text-neutral-600"
                   >
-                    <User size={16} /> Hồ sơ cá nhân ({user.fullName})
+                    <span className="h-8 w-8 shrink-0 overflow-hidden rounded-full bg-neutral-900 text-white flex items-center justify-center">
+                      {user.avatar ? (
+                        <img
+                          src={user.avatar}
+                          alt=""
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <User size={16} aria-hidden="true" />
+                      )}
+                    </span>
+                    <span>Hồ sơ cá nhân ({user.fullName})</span>
                   </NavLink>
                   <button
                     onClick={handleLogout}
