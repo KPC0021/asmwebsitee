@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useCartAndAuth } from '../context/CartAndAuthContext';
 import { SectionTitle } from '../components/SectionTitle';
-import { User as UserIcon, Mail, Phone, MapPin, Edit2, CheckCircle2, ShoppingBag, X, Calendar, DollarSign, Bookmark, ArrowRight, UserCheck, Eye, Truck, Package, Clock, Check } from 'lucide-react';
+import { Mail, Phone, MapPin, Edit2, CheckCircle2, ShoppingBag, X, Calendar, Bookmark, Eye, Truck, Package, Camera, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { validateFullName, validatePhone, validateAddress } from '../utils/validation';
 
@@ -25,6 +25,9 @@ export const Profile: React.FC = () => {
     address: '',
   });
   const [errors, setErrors] = useState<Partial<typeof formData>>({});
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+  const [avatarError, setAvatarError] = useState('');
+  const [isProcessingAvatar, setIsProcessingAvatar] = useState(false);
 
   // Simulated orders placed by this user (read from localStorage)
   const [orders, setOrders] = useState<any[]>([]);
@@ -120,6 +123,69 @@ export const Profile: React.FC = () => {
     setIsEditing(false);
   };
 
+  const resizeAvatar = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const image = new Image();
+        image.onload = () => {
+          const maxSize = 512;
+          const scale = Math.min(1, maxSize / Math.max(image.width, image.height));
+          const width = Math.max(1, Math.round(image.width * scale));
+          const height = Math.max(1, Math.round(image.height * scale));
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+
+          const context = canvas.getContext('2d');
+          if (!context) {
+            reject(new Error('Không thể xử lý ảnh.'));
+            return;
+          }
+
+          context.drawImage(image, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', 0.82));
+        };
+        image.onerror = () => reject(new Error('Không thể đọc tệp ảnh này.'));
+        image.src = String(reader.result);
+      };
+
+      reader.onerror = () => reject(new Error('Không thể đọc tệp ảnh này.'));
+      reader.readAsDataURL(file);
+    });
+
+  const handleAvatarChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+
+    setAvatarError('');
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+      setAvatarError('Vui lòng chọn ảnh JPG, PNG hoặc WEBP.');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setAvatarError('Ảnh đại diện không được lớn hơn 5 MB.');
+      return;
+    }
+
+    setIsProcessingAvatar(true);
+    try {
+      const avatar = await resizeAvatar(file);
+      updateUserProfile({ avatar });
+    } catch (error) {
+      setAvatarError(error instanceof Error ? error.message : 'Không thể cập nhật ảnh đại diện.');
+    } finally {
+      setIsProcessingAvatar(false);
+    }
+  };
+
+  const handleAvatarRemove = () => {
+    setAvatarError('');
+    updateUserProfile({ avatar: '' });
+  };
+
   // Status mapping
   const statusLabels: Record<string, { label: string; color: string; bg: string }> = {
     processing: { label: 'Đang xử lý', color: 'text-amber-700', bg: 'bg-amber-50 border-amber-100' },
@@ -145,13 +211,60 @@ export const Profile: React.FC = () => {
               
               {/* Profile Avatar & Metadata header */}
               <div className="text-center pb-6 border-b border-neutral-100">
-                <div className="h-20 w-20 rounded-full bg-neutral-900 text-white flex items-center justify-center text-2xl font-light mx-auto mb-4 tracking-wider">
-                  {user.fullName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
+                <div className="relative h-24 w-24 mx-auto mb-4 group">
+                  <div className="h-full w-full rounded-full bg-neutral-900 text-white flex items-center justify-center text-2xl font-light tracking-wider overflow-hidden ring-4 ring-neutral-50">
+                    {user.avatar ? (
+                      <img
+                        src={user.avatar}
+                        alt={`Ảnh đại diện của ${user.fullName}`}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      user.fullName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => avatarInputRef.current?.click()}
+                    disabled={isProcessingAvatar}
+                    aria-label="Chọn ảnh đại diện từ thiết bị"
+                    className="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-[#c9a96e] text-neutral-950 border-2 border-white flex items-center justify-center shadow-md hover:bg-[#d6ba82] disabled:opacity-60 transition-colors"
+                  >
+                    <Camera size={14} />
+                  </button>
+                  <input
+                    ref={avatarInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    onChange={handleAvatarChange}
+                    className="sr-only"
+                  />
                 </div>
                 <h3 className="text-base font-semibold text-neutral-900 tracking-tight">{user.fullName}</h3>
                 <span className="text-[10px] uppercase font-bold text-neutral-400 tracking-wider">
                   MEMBER OF THE ATELIER CLUB
                 </span>
+                <div className="flex items-center justify-center gap-3 mt-3">
+                  <button
+                    type="button"
+                    onClick={() => avatarInputRef.current?.click()}
+                    disabled={isProcessingAvatar}
+                    className="text-[10px] uppercase tracking-wider font-bold text-neutral-700 hover:text-[#9a773d] disabled:text-neutral-400 transition-colors"
+                  >
+                    {isProcessingAvatar ? 'Đang xử lý...' : user.avatar ? 'Thay ảnh' : 'Tải ảnh lên'}
+                  </button>
+                  {user.avatar && !isProcessingAvatar && (
+                    <button
+                      type="button"
+                      onClick={handleAvatarRemove}
+                      className="inline-flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold text-red-500 hover:text-red-700 transition-colors"
+                    >
+                      <Trash2 size={11} /> Xóa ảnh
+                    </button>
+                  )}
+                </div>
+                <p className="text-[9px] text-neutral-400 mt-2">JPG, PNG hoặc WEBP · Tối đa 5 MB</p>
+                {avatarError && <p className="text-[10px] text-red-500 mt-2" role="alert">{avatarError}</p>}
               </div>
 
               {/* View/Edit toggle area */}
